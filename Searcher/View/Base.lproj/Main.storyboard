@@ -7,10 +7,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Search Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Searcher" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SearchController" customModule="Searcher" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -105,7 +105,7 @@
                     <connections>
                         <outlet property="fiveSelected" destination="KhM-gK-Twp" id="wgV-b3-n9X"/>
                         <outlet property="searchTextField" destination="hl6-OQ-tFf" id="EEr-OQ-8NC"/>
-                        <outlet property="tableview" destination="cKg-ds-d0n" id="v5f-iS-LE2"/>
+                        <outlet property="tableView" destination="cKg-ds-d0n" id="v5f-iS-LE2"/>
                         <outlet property="tenSelected" destination="i5H-dH-f2m" id="K92-1x-Mnq"/>
                     </connections>
                 </viewController>

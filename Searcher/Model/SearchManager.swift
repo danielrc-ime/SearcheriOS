@@ -9,7 +9,7 @@
 import Foundation
 
 protocol SearchManagerDelegate {
-    func didUpdateSearch(_ SearchManager: SearchManager, search: SearchModel)
+    func didUpdateSearch(_ SearchManager: SearchManager, search: [SearchModel])
     func didFailWitherror(error: Error)
 }
 
@@ -46,27 +46,22 @@ struct SearchManager {
         }
     }
 
-    func parseJSON(_ searchData: Data) -> SearchModel?{
+    func parseJSON(_ searchData: Data) -> [SearchModel]?{
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(SearchData.self, from: searchData)
             
+            var search: [SearchModel] = []
+            
             for item in decodedData.plpResults.records {
+                search.append(SearchModel(productDisplayName: item.productDisplayName, promoPrice: item.promoPrice, category: item.category, smImage: item.smImage))
                 print(item.productDisplayName)
             }
-            
-            let productDisplayName = decodedData.plpResults.records[0].productDisplayName
-            //print(productDisplayName)
-            let promoPrice = decodedData.plpResults.records[0].promoPrice
-            let category = decodedData.plpResults.records[0].category
-            let smImage = decodedData.plpResults.records[0].smImage
-
-            let search = SearchModel(productDisplayName: productDisplayName, promoPrice: promoPrice, category: category, smImage: smImage)
             return search
         } catch {
             //print(error)
             delegate?.didFailWitherror(error: error)
-            return nil
+            return []
         }
     }
     

@@ -8,24 +8,24 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SearchController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var tableview: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var fiveSelected: UIButton!
     @IBOutlet weak var tenSelected: UIButton!
     
     var searchManager = SearchManager()
     var items = ["Articulos..."]
-    var itemsSelected = "0"
+    var itemsSelected = "5"
    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchTextField.delegate = self
         searchManager.delegate = self
         
-        tableview.delegate = self
-        tableview.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 
     @IBAction func articulosSelected(_ sender: UIButton) {
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
 
 
 //MARK: - UITextFieldDelegate
-extension ViewController: UITextFieldDelegate {
+extension SearchController: UITextFieldDelegate {
     @IBAction func searchPressed(_ sender: UIButton) {
         searchTextField.endEditing(true)
     }
@@ -69,27 +69,34 @@ extension ViewController: UITextFieldDelegate {
 }
 
 //MARK: - SearchManagerDelegate
-extension ViewController: SearchManagerDelegate{
-    func didUpdateSearch(_ SearchManager: SearchManager, search: SearchModel) {
-        DispatchQueue.main.async {
-            print(search.productDisplayName)
-        }
-    }
-    
+extension SearchController: SearchManagerDelegate{
     func didFailWitherror(error: Error) {
         print(error)
+    }
+    
+    func didUpdateSearch(_ SearchManager: SearchManager, search: [SearchModel]) {
+        //clear array of items
+        items = []
+        
+        DispatchQueue.main.async {
+            for item in search {
+                print(item.category)
+                self.items.append(item.category)
+            }
+            self.tableView.reloadData()
+        }
     }
 }
 
 //MARK: - UITableViewDataSource
-extension ViewController: UITableViewDataSource {
+extension SearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
           return items.count
     }
 }
 
 //MARK: - UITableViewDelegate
-extension ViewController: UITableViewDelegate {
+extension SearchController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
         cell.textLabel?.text  = items[indexPath.row]
