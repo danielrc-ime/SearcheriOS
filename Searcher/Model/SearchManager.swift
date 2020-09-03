@@ -55,7 +55,7 @@ struct SearchManager {
             
             for item in decodedData.plpResults.records {
                 search.append(SearchModel(productDisplayName: item.productDisplayName, promoPrice: item.promoPrice, category: item.category, smImage: item.smImage))
-                print(item.productDisplayName)
+                //print(item.productDisplayName)
             }
             return search
         } catch {

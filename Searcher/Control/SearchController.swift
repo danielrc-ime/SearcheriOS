@@ -16,8 +16,13 @@ class SearchController: UIViewController {
     @IBOutlet weak var tenSelected: UIButton!
     
     var searchManager = SearchManager()
-    var items = ["Articulos..."]
+    var tituloArray = ["Articulos..."]
+    var precioArray = ["Articulos..."]
+    var ubicacionArray = ["Articulos..."]
+    var imageArray: [UIImage] = []
     var itemsSelected = "5"
+    
+    let cellReuseIdentifier = "cell"
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,12 +81,18 @@ extension SearchController: SearchManagerDelegate{
     
     func didUpdateSearch(_ SearchManager: SearchManager, search: [SearchModel]) {
         //clear array of items
-        items = []
+        tituloArray = []
+        precioArray = []
+        ubicacionArray = []
+        imageArray = []
         
         DispatchQueue.main.async {
             for item in search {
                 print(item.category)
-                self.items.append(item.category)
+                self.tituloArray.append(item.productDisplayName)
+                self.precioArray.append(item.precio)
+                self.ubicacionArray.append(item.category)
+                //self.imageArray.append(contentsOf: item.imagen)
             }
             self.tableView.reloadData()
         }
@@ -91,15 +102,22 @@ extension SearchController: SearchManagerDelegate{
 //MARK: - UITableViewDataSource
 extension SearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          return items.count
+          return tituloArray.count
     }
 }
 
 //MARK: - UITableViewDelegate
 extension SearchController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
-        cell.textLabel?.text  = items[indexPath.row]
+        
+        //let cell:UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
+        let cell:CustomTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! CustomTableViewCell
+        cell.tituloLabel?.text = tituloArray[indexPath.row]
+        cell.precioLabel?.text = precioArray[indexPath.row]
+        cell.ubicacionLabel?.text = ubicacionArray[indexPath.row]
+        cell.cellImageView.image = UIImage(systemName: "xmark.icloud")
+        //cell.textLabel?.text  = items[indexPath.row]
         
         //cell.imageView!.image = UIImage(named: items[indexPath.row])!
         return cell
