@@ -110,7 +110,6 @@ extension SearchController: SearchManagerDelegate{
         tituloArray = []
         precioArray = []
         ubicacionArray = []
-        //imageArray = []
         imagesString = []
         
         DispatchQueue.main.async {
@@ -138,13 +137,11 @@ extension SearchController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //let cell:UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
         let cell:CustomTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! CustomTableViewCell
         cell.tituloLabel?.text = tituloArray[indexPath.row]
-        cell.precioLabel?.text = precioArray[indexPath.row]
-        cell.ubicacionLabel?.text = ubicacionArray[indexPath.row]
+        cell.precioLabel?.text = "$" + precioArray[indexPath.row]
+        cell.ubicacionLabel?.text = "Categoría: " + ubicacionArray[indexPath.row]
         cell.cellImageView?.imageFromServerURL(urlString: imagesString[indexPath.row], PlaceHolderImage: UIImage(systemName: "xmark.icloud")!)
-        //cell.cellImageView?.image = UIImage(systemName: "xmark.icloud")
         return cell
     }
 }
