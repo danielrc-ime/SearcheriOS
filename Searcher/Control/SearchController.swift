@@ -17,9 +17,10 @@ class SearchController: UIViewController {
     
     var searchManager = SearchManager()
     var tituloArray = ["Articulos..."]
-    var precioArray = ["Articulos..."]
-    var ubicacionArray = ["Articulos..."]
+    var precioArray = ["Titulo..."]
+    var ubicacionArray = ["Categoría..."]
     var imageArray: [UIImage] = []
+    var imagesString = ["urls"]
     var itemsSelected = "5"
     
     let cellReuseIdentifier = "cell"
@@ -31,6 +32,8 @@ class SearchController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        imageArray.append(UIImage(systemName: "xmark.icloud")!)
     }
 
     @IBAction func articulosSelected(_ sender: UIButton) {
@@ -73,6 +76,29 @@ extension SearchController: UITextFieldDelegate {
     }
 }
 
+//MARK: - UIImageView Load fromURL
+extension UIImageView {
+
+public func imageFromServerURL(urlString: String, PlaceHolderImage:UIImage) {
+
+       if self.image == nil{
+             self.image = PlaceHolderImage
+       }
+
+       URLSession.shared.dataTask(with: NSURL(string: urlString)! as URL, completionHandler: { (data, response, error) -> Void in
+
+           if error != nil {
+               print(error ?? "No Error")
+               return
+           }
+           DispatchQueue.main.async(execute: { () -> Void in
+               let image = UIImage(data: data!)
+               self.image = image
+           })
+
+       }).resume()
+   }}
+
 //MARK: - SearchManagerDelegate
 extension SearchController: SearchManagerDelegate{
     func didFailWitherror(error: Error) {
@@ -84,7 +110,8 @@ extension SearchController: SearchManagerDelegate{
         tituloArray = []
         precioArray = []
         ubicacionArray = []
-        imageArray = []
+        //imageArray = []
+        imagesString = []
         
         DispatchQueue.main.async {
             for item in search {
@@ -92,7 +119,7 @@ extension SearchController: SearchManagerDelegate{
                 self.tituloArray.append(item.productDisplayName)
                 self.precioArray.append(item.precio)
                 self.ubicacionArray.append(item.category)
-                //self.imageArray.append(contentsOf: item.imagen)
+                self.imagesString.append(item.smImage)
             }
             self.tableView.reloadData()
         }
@@ -116,10 +143,8 @@ extension SearchController: UITableViewDelegate {
         cell.tituloLabel?.text = tituloArray[indexPath.row]
         cell.precioLabel?.text = precioArray[indexPath.row]
         cell.ubicacionLabel?.text = ubicacionArray[indexPath.row]
-        cell.cellImageView.image = UIImage(systemName: "xmark.icloud")
-        //cell.textLabel?.text  = items[indexPath.row]
-        
-        //cell.imageView!.image = UIImage(named: items[indexPath.row])!
+        cell.cellImageView?.imageFromServerURL(urlString: imagesString[indexPath.row], PlaceHolderImage: UIImage(systemName: "xmark.icloud")!)
+        //cell.cellImageView?.image = UIImage(systemName: "xmark.icloud")
         return cell
     }
 }

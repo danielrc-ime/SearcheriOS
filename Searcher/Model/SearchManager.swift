@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SearchManagerDelegate {
     func didUpdateSearch(_ SearchManager: SearchManager, search: [SearchModel])
@@ -64,5 +65,4 @@ struct SearchManager {
             return []
         }
     }
-    
 }
